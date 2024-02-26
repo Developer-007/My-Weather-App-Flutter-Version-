@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:my_weather_app/presentation/hour_data.dart';
 import '../data/models/weather_model.dart';
-import '../data/repository/repository_impl.dart';
+import 'package:get_it/get_it.dart';
 import '../domain/repository/repository.dart';
 import '../domain/usecases/get_data_usecase.dart';
+import 'AppModule.dart';
 import 'other_info.dart';
 
-void main() =>runApp(MaterialApp(home: MainPage()));
+void main() {
+  GetIt getIt = GetIt.instance;
+  AppModule().setup(getIt);
+  runApp(MaterialApp(home: MainPage()));
+}
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -20,14 +26,11 @@ class _MainPageState extends State<MainPage> {
   String city='Moscow';
   double temp=0.0;
   String condition='';
-
-  late Repository repository;
   late GetDataUseCase getDataUseCase;
 
   void initState(){
     super.initState();
-    repository=RepositoryImplementation();
-    getDataUseCase=GetDataUseCase(repository);
+    getDataUseCase=GetIt.instance<GetDataUseCase>();
     getData();
   }
 
